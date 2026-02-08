@@ -49,7 +49,7 @@ wh_salaries |> summarise(mean_salary = mean(SALARY),
 
 Write a couple of sentences describing the results of your analysis. What do the mean and median salaries tell you about the data? What do the minimum and maximum salaries tell you? Are there any outliers in the data?
 
-The mean salary is 109,117 while the median salary is 101,500 which means the distribution is slightly skewed to the right. This means higher salaries are pulling the average up above the median. The min salary is 0, indicating there are unpaid/missing value entries that could affect analysis, while the max is 225,700 showing wide salary range. The 0 values and highest salaries act as outliers and contribute to the skewness of the data.
+The mean salary is 109,117 while the median salary is 101,500 which means the distribution is slightly skewed to the right. This means higher salaries are pulling the average up above the median. The min salary is 0, indicating there are unpaid/missing value entries that could affect analysis, while the max is 225,700 showing wide salary range. The 0 values and highest salaries act as outliers and contribute to the skewness of the data..
 
 ### Task 7: Story Idea
 
