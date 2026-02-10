@@ -45,7 +45,7 @@ crimes_with_rates <- crimes |> mutate(violent_rate = violent_crime_total/populat
 
 Write a few sentences about what you found in the data. What years had the highest crime rates? What years had the lowest crime rates? Does the pattern match your expectations?
 
-
+The early eighties and the seventies had the highest overall crime rats, with crime reducing the more we come to modern day. Looking at the violent and property crime rates- violent crime was at its highest in the 90s with a 95.> rate, compared to today where it is in the 40s. Property violence has been on a steady decrease since the 80s, with the exception of the mid 90s where it rose back into the 500s after dropping below for a good amount of years prior. The pattern does match my expectations because whenever I watch serial killer documentaries, they always take place in the 70s or 80s due to the lack of technology available to find the serial killers. With less retribution, I would've guessed the crimes would be higher.
 
 
 When you are done, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
