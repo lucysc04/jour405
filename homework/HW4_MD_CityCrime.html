@@ -476,6 +476,44 @@ that most serious crimes remain concentrated in larger urban areas.</p>
 changes to your GitHub repository and submit the URL for this file in
 ELMS.</p>
 </div>
+<div id="task-10" class="section level3">
+<h3>Task 10:</h3>
+<p>Using the 2020 violent crime rate, calculate the percentiles using
+<code>ntile()</code>. Save the results to a new dataframe called
+<code>md_cities_percentiles</code>. How many cities are above the 90th
+percentile? Calculate the Interquartile Range of the 2020 violent crime
+rate using <code>summarize()</code> and R’s <code>IQR()</code> function.
+The syntax is similar to how <code>mean()</code> works. Do the results
+change your best story idea from the previous assignment? Why or why
+not?</p>
+<pre class="r"><code>library(tidyverse)
+library(janitor)</code></pre>
+<pre class="r"><code>md_cities_percentiles &lt;- md_cities_rates |&gt;
+  mutate(
+    violent_2020_percentile = ntile(violent_rate_2020, 100)
+  )</code></pre>
+<pre class="r"><code>md_cities_percentiles |&gt;
+  filter(violent_2020_percentile &gt; 90) |&gt;
+  tally()</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##       n
+##   &lt;int&gt;
+## 1    10</code></pre>
+<pre class="r"><code>md_cities_rates |&gt;
+  summarize(IQR_violent_2020 = IQR(violent_rate_2020, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   IQR_violent_2020
+##              &lt;dbl&gt;
+## 1             420.</code></pre>
+<p>The data confirms that a small group of cities account for the
+highest violent crime rates, while may towns report very low or even
+zero rates. The middle 50% of cities fall within a moderate range, with
+my 90th percentile calculation working out that only about 10 cities
+rank in the top 10% statewide. This supports my original angle for the
+lede that dramatic swings in sparser populations can distort perception,
+sine extreme rates are concentrated in a handful of places rather than
+spread statewide.</p>
+</div>
 
 
 
