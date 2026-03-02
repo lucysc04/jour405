@@ -75,8 +75,7 @@ ggplot(accidents, aes(x = date, y = total)) +
 ### Task 1 (3 points)
 Looking at the time series visualization above, identify at least two noticeable patterns or anomalies. What questions would you want to investigate further based on this initial view of the data? How might these visual patterns translate into potential story angles?
 
-ANSWER HERE
-
+The data shows fluctuations, suggesting there may be weekly or seasonal patterns in accidents, with some days spiking sharply above the norm. These coudl correspond to extreme weather or local events. Therefore it would be beneficial to explore which dates are most dangerous and see whether they coincide with any events in particular; this would provide potential story angles.
 The daily data is quite noisy, so let's also look at weekly patterns:
 
 ```{r weekly-patterns}
@@ -114,7 +113,9 @@ ggplot(accidents, aes(x = day_of_week, y = total)) +
 ### Task 2 (2 points)
 Based on the day-of-week analysis, which day(s) have the highest and lowest average accidents? Why might these patterns exist?
 
-ANSWER HERE
+  kable(digits = 2)
+
+Based on the data, Friday has the highest avg number of accidents (27.96), with Saturday in second place (27.71), while Wednesday has the lowest average (22.91). Higher accidents on Fridays and Saturdays may be because of increased traffic from people running errands, or going out for social activities, while midweek days like Wednesday normally have lighter traffic trends.
 
 ## Calculating Z-Scores
 
@@ -161,7 +162,8 @@ unusual_days |>
 ### Task 3 (3 points)
 Choose one of the top 10 unusual days and research what might have happened on that date. Look for weather events, holidays, major incidents, or other factors that could explain the unusual number of accidents. Briefly describe your findings and how you would incorporate this context into a story.
 
-ANSWER HERE
+https://www.washingtonpost.com/dc-md-va/2021/10/29/flooding-roads-closed/
+On October 29, 2021, PG County saw 58 accidents (z‑score 4.77), likely due to heavy rain and local flooding in the area. The weather made roads dangerous, driving the spike in accidents. A story could highlight how sudden storms and flooding increase traffic risks and accidents
 
 Let's visualize these unusual days:
 
@@ -210,7 +212,7 @@ unusual_dow |>
 ### Task 4 (3 points)
 Compare the days that have extreme z-scores overall versus those with extreme day-of-week z-scores. How do these lists differ? What journalistic insights can you draw from comparing these two different approaches to measuring "unusual" days?
 
-ANSWER HERE
+Comparing the two, overall z-scores flag the days with unusually high or low accident comparing all days, while DOW z-scores identify days that are extreme compared to the avg accident count for that specific weekday. To prove this, a Saturday with 50 accidents might be unusual overall, but less extreme compared to other Saturdays. Looking at this from a journalism standpoint, overall z-scores pinpoint the most shocking spikes/drops, while DOW z-scores show unexpected numbers within normal weekly patterns. This helps reporters figure out whether a day’s accidents were surprising for that weekday or just part of a bigger trend.
 
 Let's see how many unusual days we have for each day of the week:
 
@@ -289,7 +291,7 @@ unusual_monthly |>
 ### Task 5 (2 points)
 Based on the monthly pattern analysis, which months have the highest and lowest average accidents? Develop a hypothesis about why these seasonal patterns exist.
 
-ANSWER HERE
+The month with the highest avg is October (27.52), while the lowest is January (22.21). This pattern appears to be seasonal and could be because of increased travel and the worsening weather in the fall(e.g.heavier rain). and it getting dark out earlier. Whereas January normally has less trips and weather is either very snowy or just cold with less of a chance of rain. When it snows the average person chooses not to drive and uses public transport, reducing traffic on the road and therefore accidents.
 
 ## Identifying Extreme Outliers
 
@@ -314,9 +316,17 @@ if(nrow(extreme_outliers) > 0) {
 ### Task 6 (2 points)
 For the extreme outliers identified (z-scores beyond ±3), what do they have in common?
 
-ANSWER HERE
+The extreme outliers mostly happen to occur on Fridays and Saturdays, which are the days with the highest average accidents, suggesting that weekend social activities contribute to a higher total of accidents. Low outliers, like Nov 29 2021, and March 23 2025, tend to happen on Mondays or Sundays which on avg have fewer accidents. On the whole, extreme days are linked to weekend activity, or unusual events/weather.
 
 ## Your Best Story Pitch
 
 ### Task 7 (5 points)
 Based on all the analyses performed, craft your best story pitch, including a headline and lede. Be sure to include what kinds of sources/people you'd talk to for the story.
+
+When Does Driving Get the Most Dangerous? How the Data Reflects Weekends and Weather as the Deciding Factors
+
+From sudden storms to busy weekends, Prince George’s County experiences spikes in car accidents, with some days seeing more than double the usual crashes. Analysis of accident data reveals Fridays and Saturdays consistently produce the highest accident counts, while unusual events like severe weather can create record-breaking spikes.
+
+Sources:
+Sources I could interview include local traffic authorities or police who deal with the accidents and what trends they personally identify. Residents or drivers for the human perspective for when they avoid travelling.
+
