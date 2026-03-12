@@ -1,6 +1,6 @@
 ---
 title: "Baltimore County 911 Overdose Calls Analysis"
-author: "YOUR NAME HERE"
+author: "Lucy Scothern"
 ---
 
 ```{r setup, include=FALSE}
@@ -74,7 +74,7 @@ summary(daily_calls$call_count)
 
 Let's visualize the time series of daily calls. What patterns do you see? If you had to draw horizontal lines that would highlight unusual days, where would those lines be?
 
-ANSWER HERE
+Most days have a cluster with a consistent range. There are some spikes where the number of calls is noticeably higher- most values fall within a middle range.To highlight unusual days, horizontal lines could be placed just outside the typical range. This would help me to visually spot outliers quickly before confirming them with z-scores.
 
 ```{r daily-calls-plot}
 # Plot daily call volume
@@ -137,7 +137,7 @@ unusual_days |>
 
 Let's visualize these unusual days in the context of the full dataset. How do they differ from your answer on Task 3?
 
-ANSWER HERE
+The unusual days stand out more clearly than in the visual estimates from Task 3. The z-score calculation identifies which days are unusual (beyond +2 sds). Some of the spikes I can see visually are confirmed as unusually high call days, while others that looked high may still fall within the normal range. Using z-scores provides a more accurate way to identify unusual days.
 
 ```{r plot-unusual-days}
 # Create a clean factor for the plot legend
@@ -207,7 +207,7 @@ ggplot(dow_summary, aes(x = day_of_week, y = avg_calls)) +
 
 We can also calculate z-scores that account for the day of the week pattern. How would you describe the day with the highest z-score without using the term "z-score"?
 
-ANSWER HERE
+I would call this day the most abnormally high/low day of the year for calls.
 
 ```{r day-of-week-z-scores}
 # Calculate day-of-week adjusted z-scores
@@ -298,5 +298,6 @@ top_outliers |> kable(digits = 2)
 
 Based on our z-score analysis, what are some potential angles for reporting? What would your next steps be and what would you tell an editor about your findings?
 
-ANSWER HERE
+I would tell my editor that the data shows clear spikes in overdose-related 911 calls that stand out. These stats could lead to further reporting on what caused them and how the county responds to the surges.
+
 
