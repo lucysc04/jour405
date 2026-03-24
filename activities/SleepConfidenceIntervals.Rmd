@@ -1,0 +1,185 @@
+---
+title: "SleepConfidenceIntervals"
+output: html_document
+---
+
+--
+title: "Confidence Intervals with Sleep Data"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Are Students Getting Enough Sleep?
+
+The CDC recommends that adults aged 18-25 get at least 7 hours of sleep per night. A campus health reporter wants to know: are students at this university getting enough sleep?
+
+Remember providing the hours you slept the night before our first class? Your job is to analyze this data and determine what we can confidently say about sleep habits across the entire student body.
+
+This is the core challenge of confidence intervals: using a **sample** to make claims about a **population**.
+
+### Task 1: Load the tidyverse and the data
+
+```{r}
+library(tidyverse)
+
+sleep_data <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/sleep_data.csv")
+
+head(sleep_data)
+```
+
+### Task 2: Calculate descriptive statistics
+
+Let's start with what we know about these students. Calculate the mean, standard deviation and number of observations.
+
+```{r}
+sleep_stats <- sleep_data |>
+  summarise(
+    mean_hours = mean(hours),
+    sd_hours = sd(hours),
+    n = n()
+  )
+
+sleep_stats
+```
+
+**Answer this question:** Based on these numbers alone, what would you tell the health reporter? Why might it be risky to report the average as the definitive answer for all students?
+
+The sample size is relatively small and doesn't encompass a broad view of students on campus. Also, all these students have the same major, with a similar work load to one another and doesn't include students that have more time consuming majors like computer science. The range of the data isn't necessarily the issue, because the standard deviation isn't above 2 and completely abnormal, it's more the people you have chosen to sample. The risk comes from the non-diverse sample.
+
+### Task 3: Calculate the standard error
+
+The standard error tells us how much our sample mean would vary if we took many different samples of 37 students. It's the key to moving from "this is what 37 students told us" to "this is what we think is true for the whole campus." The formula is: standard deviation divided by the square root of the sample size.
+
+```{r}
+sleep_stats <- sleep_stats |>
+  mutate(
+    se_hours = sd_hours / sqrt(37)
+  )
+
+sleep_stats
+```
+
+**Answer this question:** The standard error is much smaller than the standard deviation. Why? What does each one measure?
+
+The se is much smaller than the sd because the se measures the overall accuracy of the sample mean rather than the way the individual data is dispersed. Each one measures the multiplication of the sample's mean to get a broader view of how accurate it might be on a larger scale.
+
+### Task 4: Calculate a 95% confidence interval
+
+Now we'll build our confidence interval. For a 95% CI with a small sample, we use the t-distribution. The `qt(0.975, df = n - 1)` function gives us the critical value — the number of standard errors we go above and below the mean. We multiply critical value by the standard error to get the margin of error, then add/subtract from the mean.
+
+```{r}
+sleep_stats <- sleep_stats |>
+  mutate(
+    t_critical = qt(0.975, df = n - 1),
+    margin_error = t_critical * se_hours,
+    ci_lower = mean_hours - se_hours,
+    ci_upper = mean_hours + se_hours
+  )
+
+sleep_stats |>
+  select(mean_hours, margin_error, ci_lower, ci_upper)
+```
+
+**Answer this question:** Write one sentence explaining what this confidence interval means in plain English that a reader would understand.
+
+This confidence interval is the prediction with a 95% certainty that the average will fall between the lower and upper points when surveyed on a bigger scale.
+
+### Task 5: Visualize the distribution with the confidence interval
+
+This chart shows the histogram of individual sleep hours, plus the mean (red line) and the 95% confidence interval (blue shaded region). The shaded region is the range where we think the true average for all students falls.
+
+```{r}
+ggplot(sleep_data, aes(x = hours)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "white", alpha = 0.7) +
+  geom_vline(xintercept = sleep_stats$mean_hours, color = "red", linewidth = 1) +
+  geom_vline(xintercept = sleep_stats$ci_lower, color = "blue", linetype = "dashed") +
+  geom_vline(xintercept = sleep_stats$ci_upper, color = "blue", linetype = "dashed") +
+  annotate("rect",
+           xmin = sleep_stats$ci_lower,
+           xmax = sleep_stats$ci_upper,
+           ymin = 0, ymax = Inf,
+           fill = "blue", alpha = 0.1) +
+  annotate("text", x = sleep_stats$mean_hours + 0.1, y = 8,
+           label = paste0("Mean: ", round(sleep_stats$mean_hours, 2)),
+           hjust = 0, color = "red", fontface = "bold") +
+  labs(
+    title = "Distribution of Student Sleep Hours",
+    subtitle = paste0("95% Confidence Interval for the mean: [",
+                     round(sleep_stats$ci_lower, 2), ", ",
+                     round(sleep_stats$ci_upper, 2), "]"),
+    x = "Hours of Sleep",
+    y = "Number of Students"
+  ) +
+  theme_minimal()
+```
+
+**Answer this question:** Look at the chart. Notice that the confidence interval is much narrower than the spread of individual data points. Why? What's the difference between the variation in individual sleep hours and the uncertainty about the average?
+
+The variation The variation if the sleep hours may look much bigger when displayed in a graph than it actually is. There are outliers at either end that represent a very low number if not a lone student. The most answers are concentrated around the 8 hour mark, meaning the average is placed there. This means when the confidence interval is calculated they use the mean they got from the first sample which was 7.5ish, but they've given it an upper and lower bound for wiggle room.
+
+### Task 6: The CDC question — is 7 hours within the interval?
+
+The CDC recommends at least 7 hours. Based on the confidence interval, can we say students are getting enough sleep? Let's check.
+
+```{r}
+cdc_recommendation <- 7
+
+sleep_stats |>
+  mutate(
+    meets_cdc = if_else(ci_lower >= cdc_recommendation, "Yes - entire CI is at or above 7", "No - CI includes values below 7")
+  ) |>
+  select(mean_hours, ci_lower, ci_upper, meets_cdc)
+```
+
+**Answer this question:** Based on this result, which of these headlines is justified? Why?
+
+  a) "Students Average More Than 7 Hours of Sleep"
+  b) "Students May Not Be Getting Enough Sleep, Survey Suggests"
+  c) "Survey: Students Getting Recommended Amount of Sleep"
+
+I would choose A because it reports the findings straight away and is factually correct- it includes the words average which makes the reader aware that its not every student ever sleeping more than 7 hours a night.
+
+### Task 7: What about a bigger sample?
+
+The margin of error depends on the sample size. What if we had surveyed 100 students instead of 37 and got the same mean and standard deviation? Let's recalculate with a hypothetical sample size 100.
+
+```{r}
+hypothetical_n <- 100
+
+hypothetical_stats <- tibble(
+  mean_hours = sleep_stats$mean_hours,
+  sd_hours = sleep_stats$sd_hours,
+  n = hypothetical_n,
+  se_hours = sd_hours / sqrt(hypothetical_n),
+  t_critical = qt(0.975, df = hypothetical_n - 1),
+  margin_error = t_critical * se_hours,
+  ci_lower = mean_hours - margin_error,
+  ci_upper = mean_hours + margin_error
+)
+
+# Compare the two intervals side by side
+comparison <- tibble(
+  sample_size = c(sleep_stats$n, hypothetical_n),
+  margin_error = c(sleep_stats$margin_error, hypothetical_stats$margin_error),
+  ci_lower = c(sleep_stats$ci_lower, hypothetical_stats$ci_lower),
+  ci_upper = c(sleep_stats$ci_upper, hypothetical_stats$ci_upper)
+)
+
+comparison
+```
+
+**Answer this question:** How did the margin of error change? What does this tell you about the relationship between sample size and certainty?
+
+the margin of error got smaller the bigger the sample size. This shows that the bigger the sample size, the more certainty there are in the results.
+
+### Task 8: Journalistic interpretation
+
+You now have all the statistics you need. Based on what you've calculated:
+
+Write a headline and a one-paragraph lede for a campus news story about student sleep habits. Your text should accurately reflect the confidence interval — don't overstate or understate the findings.
+
+Sleepy students: New data shows students are average more than 7 hours of sleep
+
+Polls taken on a college campus show that on average students are sleeping over the 7 hour minimum recommended by professionals. With minimal outliers that may be due to extenuating circumstances it seems today's students are making sure to get the rest they need to maintain a healthy lifestyle. 
