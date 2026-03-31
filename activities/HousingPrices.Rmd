@@ -158,5 +158,10 @@ print(conclusion)
 
 ## Task 6: What's the story?
 
-After disucssion the results, each person writes a couple of sentences for the top of a story about local officials' claims on the impact of the transit line and what the data says. Remember that there are lots of possible reasons that could influence the price of a home. Make your sentences newsy.
+After discussion the results, each person writes a couple of sentences for the top of a story about local officials' claims on the impact of the transit line and what the data says. Remember that there are lots of possible reasons that could influence the price of a home. Make your sentences newsy.
+
+A new light rail extension may be raising home values in a local neighborhood, with recent sales averaging about nearly $20,000 higher than before the line opened. New data has provided statistical evidence to support the claim that the transit line has increased prices. Still, although statistically significant, housing markets are influenced by a variety of factors and we cannot rely on data alone to prove the rail line is the main cause. 
+
+
+
 
