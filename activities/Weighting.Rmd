@@ -36,8 +36,16 @@ Survey weighting is like adjusting the volume on different voices in a conversat
 ## Our Questions
 
 1. How does weighting affect our estimates of voting intentions?
+
+Weighting adjusts the results to better reflect the real population= can shift percentages and change who appears to be leading.
+
 2. Which demographic groups show the largest differences between weighted and unweighted results?
+
+Groups that are underrepresented/ overrepresented. For example, younger voters or highly educated people show the biggest changes.
+
 3. How might weighting influence reporting of this data?
+
+Weighting can change the story journalists tell, affecting headlines and how trends are understood publicly.
 
 # Data Overview
 
@@ -93,10 +101,15 @@ ggplot(nonvoters_data, aes(x = weight)) +
 **Questions:**
 
 1. What is the range of weights in this dataset?
-
+0.3-2.5
 2. What does it mean when a respondent has a weight of 0.23? What about 3.04?
 
+0.23 = the respondent is overrepresented, so their response counts much less than one person. 
+3.04=  underrepresented, so their response counts for about three people.
+
 3. Why might some respondents be weighted more heavily than others?
+
+Because some groups are underrepresented in the sample, so their responses are increased to reflect the real population.
 
 # Exercise 1: Voter Categories and Weighting
 
@@ -233,6 +246,12 @@ kable(comparison, digits = 1, caption = "Difference Between Weighted and Unweigh
 
 1. Which voter category shows the biggest difference between weighted and unweighted results?
 
+Rarely/never voters show the biggest difference, specifically in the percentage saying they plan to vote.
+
 2. How might these differences affect reporting on likely voter turnout?
 
+It could lower the reported turnout, since weighting reduces enthusiasm from less reliable voters.
+
 3. Why do you think these differences exist? What does this tell us about who might be over or under-represented in the sample?
+
+These differences exist because some groups like engaged voters are overrepresented, while less frequent voters are underrepresented, so weighting corrects that imbalance.
