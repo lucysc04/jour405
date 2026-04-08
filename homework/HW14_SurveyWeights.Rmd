@@ -1,6 +1,6 @@
 ---
 title: "HW11: Education Level and Survey Weighting"
-author: "Your Name Here"
+author: "Lucy Scothern"
 ---
 
 ```{r setup, include=FALSE}
@@ -38,7 +38,7 @@ First, let's examine the distribution of education levels in our sample. Replace
 ```{r}
 
 education_distribution <- nonvoters_data |>
-  count(REPLACE_ME) |>
+  count(educ) |>
   mutate(percentage = n / sum(n) * 100) |>
   kable(digits = 1, col.names = c("Education Level", "Count", "Percentage (%)"))
 
@@ -49,7 +49,7 @@ education_distribution
 
 Why might education levels in survey samples often differ from the general population? What factors might cause certain education groups to be over or underrepresented?
 
-ANSWER HERE
+Typically people with a higher level of education access and fill out surveys, so that group will likely be over represented.
 
 
 ## Task 3: Unweighted Analysis by Education
@@ -91,7 +91,7 @@ kable(unweighted_educ_summary, digits = 1, caption = "Unweighted Voting Intentio
 
 Based just on this unweighted analysis, what headline might you write for a news story about education and voting intentions?
 
-ANSWER HERE
+New Survey shows college-educated individuals are more likely to vote compared to those with lower education levels.
 
 ## Task 5: Weighted Analysis by Education
 
@@ -105,7 +105,7 @@ weighted_by_education <- nonvoters_data |>
   # Group by education and response
   group_by(educ, Q21) |>
   # Sum the weights instead of counting
-  summarize(weighted_count = sum(REPLACE_ME), .groups = "drop_last") |>
+  summarize(weighted_count = sum(weight), .groups = "drop_last") |>
   # Calculate weighted percentages
   mutate(weighted_total = sum(weighted_count),
          weighted_percentage = weighted_count / weighted_total * 100) |>
@@ -132,11 +132,11 @@ kable(weighted_educ_summary, digits = 1, caption = "Weighted Voting Intentions b
 
 1. How did the percentages change after applying weights? Which education group showed the biggest changes?
 
-ANSWER HERE
+The percentages definitely became more realistic across the groups. The biggest change was seen in the college group which decreases because it was overrepresented in the sample- lower ed group increased.
 
 2. Why might the weighted results be considered more accurate than the unweighted results?
 
-ANSWER HERE
+Weighted results are more accurate because they adjust the sample to better reflect the real population, correcting over/under representation.
 
 ## Task 7: Comparison of Weighted vs. Unweighted Results
 
@@ -168,7 +168,7 @@ kable(comparison, digits = 1, caption = "Difference Between Weighted and Unweigh
 
 Which education group shows the largest differences between weighted and unweighted results?
 
-ANSWER HERE
+The highschool or less group.
 
 ## Task 9: Visualization
 
@@ -187,7 +187,7 @@ educ_viz_data <- bind_rows(
     filter(Q21 == 1) |>  # Only "Yes" responses
     mutate(
       Type = "Weighted",
-      percentage = REPLACE_ME
+      percentage = weighted_percentage
     ) |>
     select(Type, educ, percentage)
 )
@@ -216,7 +216,7 @@ ggplot(educ_viz_data,
 
 Does the visualization make it easier to see the differences between weighted and unweighted results? Why or why not?
 
-ANSWER HERE
+Yes visualization does make it easier to see because the bars allow for a side by side comparison.
 
 ## Task 11: Summary
 
@@ -226,12 +226,22 @@ Based on your analysis of weighted and unweighted results by education level, wr
 2. How weighting affected your understanding of this relationship
 3. What this means for interpreting polling results in news reporting
 
-YOUR ANSWER HERE
+Education level is strongly linked to voting intentions with college-educated respondents showing the highest likelihood of planning to vote. Those who completed some college, also ranked higher than their highschool educated counterparts showing a clear pattern: as education level increases, so does reported voter participation.
+
+However, applying weights to the data slightly changes the picture. While the overall trend remains the same, this weighting reduces the percentage of "Yes" responses among some groups providing more accurate reflection of the broader population.
+
+For journalists, this displays the importance of using appropriately weighted data when reporting on surveys or polls. Even small percentage shifts can affect trends or the overall result.
 
 ## Task 12: Final Reflection Questions
 
 1. Why is it important for journalists to understand survey weighting when reporting on polls?
 
+Because weighting ensures poll results reflect the real population, preventing misleading results based on biased samples.
+
 2. How might the differences between weighted and unweighted results affect how you would report on this data?
 
+The differences could lead me to report from a slightly different viewpoint.
+
 3. What additional information would you want to know about how the weights were calculated before using this data in a news story?
+
+I would want to know what demographic factors were used to create the weights and how large the adjustments were.
