@@ -1,0 +1,68 @@
+---
+title: "final_project"
+output: html_document
+---
+My project is comparing the safety of jurisdictions in the immediate vicinity of Big10 schools. All data is from the FBI Crime Data Explorer Website: https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/crime-trend
+
+I have data from March 2021 to, in most cases March 2026. I have compiled the 4 different categories of violent crime (aggravated assault, homicide, rape, robbery) into combined tables for each jurisdiction. My biggest concern with analyzing my data is how I'm going to work out the per capita, to weigh the data correctly dependent on population- that will be my next step. The most common data that is missing is the most recent months, i which I have filled out N/A so that RStudio recognizes it as a null value. There are 3 jurisdiction that have significantly larger populations (UMD, Ohio State and Michigan). The issue I faced with this data was that the jurisdictions are slightly different due to border lines of county's and the general policing structure in the area- these are the universities I'll have to focus on weighting the most.
+
+
+```{r}
+library(tidyverse)
+```
+
+Bloomington Violent Crime data:
+Bloomington is the immediate police jurisdiction at the University of Indiana. The Population is 80,000 residents. 
+```{r}
+view(Bloomington_VC_Data_Sheet1)
+head(Bloomington_VC_Data_Sheet1)
+```
+
+Champaign Violent Crime data:
+Champaign  is the immediate police jurisdiction at the University of Illinois. The Population is 90,000 residents. 
+```{r}
+view(Champaign_VC_Data_Sheet1)
+head(Champaign_VC_Data_Sheet1)
+```
+
+East Lansing Violent Crime data:
+East Lansing is the immediate police jurisdiction at Michigan State University. The Population is 50,000 residents. 
+```{r}
+view(East_Lansing_VC_Data_Sheet1)
+head(East_Lansing_VC_Data_Sheet1)
+```
+
+Evanston Violent Crime data:
+Evanston is the immediate police jurisdiction at Northwestern University. The Population is 77,000 residents. 
+```{r}
+view(Evanston_VC_Data_Sheet1)
+head(Evanston_VC_Data_Sheet1)
+```
+
+Franklin County Violent Crime data:
+Franklin County is the immediate police jurisdiction at The Ohio State University. The Population is 1.3 million residents. 
+```{r}
+view(Franklin_County_VC_Data_Sheet1)
+head(Franklin_County_VC_Data_Sheet1)
+```
+
+New Brunswick Violent Crime data:
+New Brunswick is the immediate police jurisdiction at Rutgers University. The Population is 55,000 residents. 
+```{r}
+view(New_Brunswick_VC_Data_Sheet1)
+head(New_Brunswick_VC_Data_Sheet1)
+```
+
+Prince George's County Violent Crime data:
+Prince George's County is the immediate police jurisdiction at the University of Maryland. The Population is 970,000 residents. 
+```{r}
+view(PG_County_VC_Data_Sheet1)
+head(PG_County_VC_Data_Sheet1)
+```
+
+Washtenaw County Violent Crime data:
+Washtenaw County is the immediate police jurisdiction at the University of Michigan. The Population is 372,000 residents. 
+```{r}
+view(Washentaw_County_VC_Data_Sheet1)
+head(Washentaw_County_VC_Data_Sheet1)
+```
