@@ -4,7 +4,11 @@ output: html_document
 ---
 My project is comparing the safety of jurisdictions in the immediate vicinity of Big10 schools. All data is from the FBI Crime Data Explorer Website: https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/crime-trend
 
-I have data from March 2021 to, in most cases March 2026. I have compiled the 4 different categories of violent crime (aggravated assault, homicide, rape, robbery) into combined tables for each jurisdiction. My biggest concern with analyzing my data is how I'm going to work out the per capita, to weigh the data correctly dependent on population- that will be my next step. The most common data that is missing is the most recent months, i which I have filled out N/A so that RStudio recognizes it as a null value. There are 3 jurisdiction that have significantly larger populations (UMD, Ohio State and Michigan). The issue I faced with this data was that the jurisdictions are slightly different due to border lines of county's and the general policing structure in the area- these are the universities I'll have to focus on weighting the most.
+I have data from March 2021 to, in most cases March 2026. I have compiled the 4 different categories of violent crime (aggravated assault, homicide, rape, robbery) into combined tables for each jurisdiction. 
+My biggest concern with analyzing my data is how I'm going to work out the per capita, to weigh the data correctly dependent on population- that will be my next step.
+The most common data that is missing is the most recent months, i which I have filled out N/A so that RStudio recognizes it as a null value. 
+There are 3 jurisdiction that have significantly larger populations (UMD, Ohio State and Michigan). The issue I faced with this data was that the jurisdictions are slightly different due to border lines of county's and the general policing structure in the area- these are the universities I'll have to focus on weighting the most.
+Since my files are downloaded to my laptop in a folder I didn't need to do a read csv to view the data. However, I would like to know how to create a csv code for my data.
 
 
 ```{r}
