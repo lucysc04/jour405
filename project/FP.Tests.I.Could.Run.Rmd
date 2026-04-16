@@ -1,0 +1,139 @@
+---
+title: "FP.Tests.I.Could.Run"
+output: html_document
+---
+
+For my project, I plan to compare violent crime in the jurisdictions surrounding multiple Big Ten universities from 2021-2025. My first problem I have to address is creating equality in the jurisdiction size. Because the jurisdictions vary a lot in population size, my first step will be to standardize the data by calculating a violent crime rate per 100,000 residents. Raw crime totals alone would make larger jurisdictions look more dangerous even if their crime rate is not actually higher per capita. 
+
+The first thing I will do is clean and organize each dataset. Each file includes monthly counts for aggravated assault, homicide, rape and robbery, so I will combine those into one total violent crime variable. I will also convert the month column into a proper date format and make sure missing values are treated as N/A. Then, I will add a population value for each jurisdiction and calculate the violent crime rate per 100,000 residents. This will create a measure that is directly comparable across schools.
+
+The code I have inserted below, I will use for all the jursidictions.
+
+```{r}
+library(tidyverse)
+
+Bloomington <- Bloomington_VC_Data_Sheet1 |>
+  rename(
+    month = Month,
+    aggravated_assault = `aggravated assault`,
+    homicide = homicide,
+    rape = rape,
+    robbery = robbery
+  ) |>
+  mutate(
+    month = my(month),
+    population = 80000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery,
+    rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Bloomington"
+  )
+```
+
+I will then combine all of the datasets into one master dataframe using bind_rows(). That will make sure I can compare all jurisdictions in one place instead of working with them separately
+```{r}
+all_crime <- bind_rows(
+  Bloomington,
+  Champaign,
+  East_Lansing,
+  Evanston,
+  Franklin_County,
+  New_Brunswick,
+  PG_County,
+  Washtenaw_County
+)
+```
+
+My first part of the actual analysis will be a line chart showing crime rates over time for each jurisdiction. We have already used the line charts in class to look for trends over a long amount of time, and this will help me see whether violent crime is rising, falling, or staying stable in each place. It will also help me see patterns or unusual spikes.
+
+```{r}
+all_crime |>
+  ggplot(aes(x = month, y = rate_per_100k, color = jurisdiction)) +
+  geom_line() +
+  labs(
+    title = "Violent Crime Rate Over Time in Big Ten Jurisdictions",
+    x = "Month",
+    y = "Violent crimes per 100,000 residents"
+  ) +
+  theme_minimal()
+```
+
+Next, I will work out the descriptive statistics for each jurisdiction, including mean VC rate, standard deviation, standard error, margin of error, and 95% confidence interval. I am getting this approach from the car theft assignment and it is useful here because it gives me a typical rate for each jurisdiction while also showing the uncertainty around that estimate.
+
+```{r}
+crime_summary <- all_crime |>
+  group_by(jurisdiction) |>
+  summarize(
+    mean_rate = mean(rate_per_100k, na.rm = TRUE),
+    sd_rate = sd(rate_per_100k, na.rm = TRUE),
+    months = sum(!is.na(rate_per_100k)),
+    se_rate = sd_rate / sqrt(months),
+    margin_error = qt(0.975, df = months - 1) * se_rate,
+    ci_lower = mean_rate - margin_error,
+    ci_upper = mean_rate + margin_error
+  )
+
+crime_summary
+```
+
+
+Then to help me visualize the rates calculated, I will create a bar chart. This will help show the differences between jurisdictions are likely to be real or whether they could be due to variation in the monthly data. If confidence interval overlaps a lot, I will be more aware about making strong claims. If they do not overlap much, that would support stronger comparisons. If they do not overlap, that would support stronger comparisons. This follows the same logic as the comparison chart we used in the car theft assignment, once again.
+
+```{r}
+crime_summary |>
+  ggplot(aes(x = reorder(jurisdiction, mean_rate), y = mean_rate, fill = jurisdiction)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) +
+  coord_flip() +
+  labs(
+    title = "Average Violent Crime Rate by Jurisdiction",
+    x = "Jurisdiction",
+    y = "Average violent crimes per 100,000"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+After that I plan to test for significance. One useful way to do this would be to split the data into two periods, such as 2021–2023 and 2024–2025, and test whether the mean violent crime rate changed over time within the separate jurisdictions. We used this t-test when comparing two halves of the car theft data. This will help me answer whether crime is actually declining over time, not just appearing to decline visually.
+
+```{r}
+pg_periods <- all_crime |>
+  filter(jurisdiction == "Prince George's County") |>
+  mutate(period = if_else(year(month) <= 2023, "2021-2023", "2024-2025"))
+
+t_test_pg <- t.test(rate_per_100k ~ period, data = pg_periods)
+t_test_pg
+```
+
+If I comapre two periods or two jurisdictions, I also want to calculate the effect size using Cohen's d. That is useful because statistical significiance alone does not tell me how big of a difference there is. We have previously used Cohen's d in our work to show whether a chnage was small, medium or large. For my project, this will help me explain whether differences in VC rates are just detectable or meaningful in real life
+
+```{r}
+period_summary <- pg_periods |>
+  group_by(period) |>
+  summarize(
+    mean_rate = mean(rate_per_100k, na.rm = TRUE),
+    sd_rate = sd(rate_per_100k, na.rm = TRUE),
+    months = n()
+  )
+
+first_period <- period_summary |> filter(period == "2021-2023")
+second_period <- period_summary |> filter(period == "2024-2025")
+
+pooled_sd <- sqrt(
+  ((first_period$months - 1) * first_period$sd_rate^2 +
+   (second_period$months - 1) * second_period$sd_rate^2) /
+  (first_period$months + second_period$months - 2)
+)
+
+cohens_d <- (first_period$mean_rate - second_period$mean_rate) / pooled_sd
+cohens_d
+```
+
+One additional analysis I may include is a breakdown by crime tyoe instead of just comapring all VC. This would make the project more specific and detailed.
+
+
+
+
+
+
+
+
