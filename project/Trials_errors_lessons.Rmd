@@ -1,0 +1,44 @@
+---
+title: "Trials_errors_lessons"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+
+The feedback you gave me from my last project planning submission was that my t-test is neccessary but not sufficient and to add this week's topic of linear regression to the tests that I do on my data. I will also be adding multiple regression my list of tests after we have gone over it this week.
+
+Here is my code applying your feedback from last week.
+
+First I know that regression needs a number for the x-variable not a date like I have in my dataset- This took me a few tries, I asked google what I needed to do and it said i needed to bind all my data together- I dont know where I'm going wrong here 
+
+```{r}
+all_crime <- bind_rows(Bloomington_VC_Data_Sheet1, Champaign_VC_Data_Sheet1, East_Lansing_VC_Data_Sheet1, Evanston_VC_Data_Sheet1, Franklin_County_VC_Data_Sheet1, New_Brunswick_VC_Data_Sheet1, PG_County_VC_Data_Sheet1, Washentaw_County_VC_Data_Sheet1)
+```
+
+
+```{r}
+
+all_crime <- all_crime |> arrange(jurisdiction, month) |> group_by(jurisdiction) |> mutate(month_index = row_number())
+```
+
+I need to replace my t.test:
+
+```{r}
+pg_model <- all_crime |> filter(jurisdiction == "Prince George's County") |> lm(rate_per_100k ~ month_index, data= _)
+summary(pg_model)
+```
+
+
+
+
+Honestly I'm very lost with this part of the project right now, I feel like I got off to a really good and detailed start last week, noting down tests that I am still going to use for the most part, but I'm struggling a bit now. I recognize this isn't very detailed but I'd rather ask for pointers first!
+
+
+
+
+

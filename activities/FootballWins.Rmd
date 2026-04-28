@@ -9,7 +9,7 @@ Multiple regression analysis is a statistical method used to understand the rela
 
 ```{r setup}
 library(tidyverse)
-#install.packages('corrplot')
+install.packages('corrplot')
 library(corrplot)
 ```
 
@@ -54,7 +54,7 @@ The coefficients tell us the estimated effect of each independent variable on th
 
 Is this a useful model, based on what you've seen? Why?
 
-ANSWER HERE
+yes it is overall a useful model but mainly because of th points scored variable. It is the only clealry significant predictor=carrying a lot of the explanation.  Takeaways is marginally significant and yards gained is not significant ar al and has an negative relationship- doesn't add value. the model could be improved by removing the weaker variables and focusing on strong ones like points scored.
 
 ## Correlation Analysis
 
@@ -80,8 +80,10 @@ The results from our correlation analysis show the strength of the relationships
 
 Which of these three factors - Yards Gained, Takeaways and Points Scored - have the most impact on wins? Are there any that do not seem impactful at all?
 
-ANSWER HERE
+Points scored has the strongest impact on wins , followed by takeaways then yards gained. 
 
 ## Using the Model (3 points)
 
 Without using the words "multiple regression model", describe how you could use this model to cover a team or game.
+
+You could use this to explain why a team is winning or losing. For example you could show that a team’s success is driven more by scoring and forcing turnovers than just gaining yards. It helps the journalist turn game stats into a story about what actually leads to wins.
