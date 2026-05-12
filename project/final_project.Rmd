@@ -58,145 +58,44 @@ Clean and Organize Data: Each dataset includes monthly counts for aggravated ass
 
 ```{r}
 Bloomington <- Bloomington_VC_Data_Sheet1 |>
-  rename(
-    month = Month,
-    aggravated_assault= `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> 
-  mutate(
-    month = my(month),
-    population = 80000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "Bloomington"
-  )
+rename(month = Month, aggravated_assault= `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate(month = my(month), population = 80000,
+total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "Bloomington")
 ```
 
 ```{r}
-Champaign <- Champaign_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault= `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> 
-  mutate(
-    month = my(month),
-    population = 80000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "Champaign"
-  )
+Champaign <- Champaign_VC_Data1 |> rename( month = Month, aggravated_assault= `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> 
+mutate( month = my(month), population = 80000, total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "Champaign")
 ```
 
 ```{r}
-East_Lansing <- East_Lansing_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault= `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> 
-  mutate(
-    month = my(month),
-    population = 80000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "East Lansing"
-  )
+East_Lansing <- East_Lansing_VC_Data1 |> rename( month = Month, aggravated_assault= `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate( month = my(month), population = 80000,
+total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,jurisdiction = "East Lansing")
 ```
 
 ```{r}
-Evanston <- Evanston_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault = `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> mutate(
-    month = my(month),
-    population = 77000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery,
-    rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "Evanston"
-  )
+Evanston <- Evanston_VC_Data1 |> rename(month = Month, aggravated_assault = `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate(month = my(month), population = 77000, total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "Evanston")
 ```
 
 ```{r}
-Franklin_County <- Franklin_County_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault = `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> mutate(
-    month = my(month),
-    population = 77000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery,
-    rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "Franklin County"
-  )
+Franklin_County <- Franklin_County_VC_Data1 |> rename( month = Month, aggravated_assault = `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate( month = my(month), population = 77000, total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "Franklin County")
 ```
 
 ```{r}
-New_Brunswick <- New_Brunswick_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault = `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> mutate(
-    month = my(month),
-    population = 77000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery,
-    rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "New Brunswick"
-  )
+New_Brunswick <- New_Brunswick_VC_Data1 |> rename( month = Month,aggravated_assault = `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate( month = my(month), population = 77000, total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "New Brunswick")
 ```
 
 ```{r}
-PG_County <- PG_County_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault = `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> mutate(
-    month = my(month),
-    population = 77000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery,
-    rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "Prince George's County"
-  )
+PG_County <- PG_County_VC_Data1 |> rename(month = Month, aggravated_assault = `Aggravated Assault Offenses`, homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate( month = my(month), population = 77000, total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "Prince George's County")
 ```
 
 ```{r}
-Washtenaw_County <- Washentaw_County_VC_Data1 |>
-  rename(
-    month = Month,
-    aggravated_assault = `Aggravated Assault Offenses`,
-    homicide = `Homicide Offenses`,
-    rape = `Rape Offenses`,
-    robbery = `Robbery Offenses`
-  ) |> mutate(
-    month = my(month),
-    population = 77000,
-    total_violent_crime = aggravated_assault + homicide + rape + robbery,
-    rate_per_100k = (total_violent_crime / population) * 100000,
-    jurisdiction = "Washtenaw County"
-  )
+Washtenaw_County <- Washentaw_County_VC_Data1 |> rename(month = Month, aggravated_assault = `Aggravated Assault Offenses`,  homicide = `Homicide Offenses`, rape = `Rape Offenses`, robbery = `Robbery Offenses`) |> mutate( month = my(month), population = 77000, total_violent_crime = aggravated_assault + homicide + rape + robbery,  rate_per_100k = (total_violent_crime / population) * 100000, jurisdiction = "Washtenaw County")
 ```
 
 Combining the data: After cleaning each dataset, I am combining them into one big dataframe using bind_rows(). This makes it possible to compare all of them together instead of analyzing individually.
 
 ```{r}
-all_crime <- bind_rows(Bloomington,Champaign, East_Lansing, Evanston, Franklin_County, New_Brunswick, PG_County, Washtenaw_County
-)
+all_crime <- bind_rows(Bloomington,Champaign, East_Lansing, Evanston, Franklin_County, New_Brunswick, PG_County, Washtenaw_County)
 ```
 
 Data exploration: Before I started to analyze, I wanted to look at the overall structure of the big dataset and check for missing values or unusual patterns 
@@ -212,12 +111,7 @@ Visualization of VC Over Time: This first visualization is a line chart showing 
 
 ```{r}
 all_crime |> ggplot(aes(x= month, y= rate_per_100k, color = jurisdiction)) + geom_line() +
-  labs(
-    title= "Violent Crime Rates Across Big Ten Jurisdictions",
-    x="Month",
-    y="Violent crimes per 100,000 residents"
-    ) +
-  theme_minimal()
+labs(title= "Violent Crime Rates Across Big Ten Jurisdictions", x="Month", y="Violent crimes per 100,000 residents") + theme_minimal()
 ```
 
 This initial graph shows substantial differences in VC rates. PG County consistently had the highest violent crime rate throughout most of the time period, often far exceeding the other areas even after adjustment. Most of cluster below 100 violent crimes per 100,000 residents, although Washtenaw County and Champaign show slight spikes on occasion. The chart simply provides early support for my hypothesis.
@@ -232,21 +126,12 @@ Next I calculated descriptive stats for each jurisdiction. These include:
 (These measures help estimate a typical violent crime rate & settlign any uncertainty.)
 
 ```{r}
-crime_summary <- all_crime |>
-  group_by(jurisdiction) |> summarize(
-    mean_rate = mean(rate_per_100k, na.rm = TRUE),
-    sd_rate = sd(rate_per_100k, na.rm = TRUE),
-    months = sum(!is.na(rate_per_100k)),
-    se_rate = sd_rate / sqrt(months),
-    margin_error = qt(0.975, df = months - 1) * se_rate,
-    ci_lower = mean_rate - margin_error,
-    ci_upper = mean_rate + margin_error
-  )
+crime_summary <- all_crime |> group_by(jurisdiction) |> summarize(mean_rate = mean(rate_per_100k, na.rm = TRUE), sd_rate = sd(rate_per_100k, na.rm = TRUE),  months = sum(!is.na(rate_per_100k)), se_rate = sd_rate / sqrt(months), margin_error = qt(0.975, df = months - 1) * se_rate, ci_lower = mean_rate - margin_error, ci_upper = mean_rate + margin_error)
 
 ```
 Again these statistics strongly support my hypothesis. PG County's average violent crime rate of approximately 287 crimes per 100,000 residents is much higher than every other jurisdiction.
 
-Washtenaw County & Champaign have the next highest avg rates, but both remain far below PG County. East Lansing and Evanston have the lowest avg violent crime rates in the project.
+Washentaw County & Champaign have the next highest avg rates, but both remain far below PG County. East Lansing and Evanston have the lowest avg violent crime rates in the project.
 
 PG County has largest standard deviation, suggesting that its VC rates tend to fluctuate a lot from month to month compared to many of the other jurisdictions. Also, its confidence interval does not overlap with any of the lower-rate jurisdictions, meaning that its higher crime rate does not come down to random variation in the data.
 
@@ -256,11 +141,7 @@ To achieve a better comparison of the areas, I have created a bar chart showing 
 
 ```{r}
 crime_summary |> ggplot(aes(x = reorder(jurisdiction, mean_rate), y = mean_rate, fill = jurisdiction)) +
-  geom_col() + geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) +
-  coord_flip() +
-  labs(title = "Average Violent Crime Rate by Jurisdiction",
-    x = "Jurisdiction",
-    y = "Average violent crimes per 100,000 residents") + theme_minimal() + theme(legend.position = "none")
+geom_col() + geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) + coord_flip() + labs(title = "Average Violent Crime Rate by Jurisdiction", x = "Jurisdiction", y = "Average violent crimes per 100,000 residents") + theme_minimal() + theme(legend.position = "none")
 ```
 
 - Further support for the hypothesis.
@@ -272,7 +153,7 @@ Hypothesis Testing:
 Next, I wanted to test whether violent crime rates changed over time. To look at this in the fairest way possible, I split the PG County data into 2 periods- 2021-23 and 2024-26. I then used a t-test to determine whether the avg VC rate changed significantly between the two time periods.
 
 Hypotheses: 
-- Null: Thereis no differnece in VC rates between the earlier and later periods.
+- Null: There is no differnece in VC rates between the earlier and later periods.
 - Alt Hypothesis: VC rates changed between the two periods.
 
 ```{r}
@@ -310,10 +191,7 @@ Linear Regression Analysis:
 The next step was to use linear regression to estimate the change in VC over time. Instead of splitting the data into 2 periods, regression allows me to estimate a continuous monthly trend. Firstly, I ahd to create a numeric month index for each jurisdiction (added onto the end of my all_crime table).
 
 ```{r}
-all_crime <- all_crime |>
-  arrange(jurisdiction, month) |>
-  group_by(jurisdiction) |>
-  mutate(month_index = row_number())
+all_crime <- all_crime |> arrange(jurisdiction, month) |> group_by(jurisdiction) |> mutate(month_index = row_number())
 ```
 
 Regression model for PG County:
@@ -321,7 +199,6 @@ This estimates VC decrease or increase in PG County over time.
 
 ```{r}
 pg_model <- all_crime |> filter(jurisdiction == "Prince George's County") |> lm(rate_per_100k ~ month_index, data = _)
-
 summary(pg_model)
 ```
 
@@ -331,9 +208,7 @@ P-value: below 0.001, indicating the downward trend is unlikely to be caused by 
 Visualizing the Regression Model:
 
 ```{r}
-all_crime |> filter(jurisdiction == "Prince George's County") |> ggplot(aes(x = month_index, y = rate_per_100k)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red") + labs( title = "Prince George's County Violent Crime Trend",
-  x = "Month Index",
-  y = "Violent crime rate per 100,000 residents") + theme_minimal()
+all_crime |> filter(jurisdiction == "Prince George's County") |> ggplot(aes(x = month_index, y = rate_per_100k)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red") + labs( title = "Prince George's County Violent Crime Trend", x = "Month Index", y = "Violent crime rate per 100,000 residents") + theme_minimal()
 ```
 
 Regression Analysis for All Jurisdictions:
@@ -365,10 +240,7 @@ Crime Type Analysis:
 One thing I really wanted to do from the start of this project was to look at the 4 violent crimes individually. One limitation of combining all the VC into one variable is that some crime categories may be driving changes more than others. To look at this I calculated the avg rates for each crime category.
 
 ```{r}
-crime_types <- all_crime |> summarize( avg_aggravated_assault = mean(aggravated_assault, na.rm = TRUE),
-    avg_homicide = mean(homicide, na.rm = TRUE),
-    avg_rape = mean(rape, na.rm = TRUE),
-    avg_robbery = mean(robbery, na.rm = TRUE))
+crime_types <- all_crime |> summarize( avg_aggravated_assault = mean(aggravated_assault, na.rm = TRUE), avg_homicide = mean(homicide, na.rm = TRUE), avg_rape = mean(rape, na.rm = TRUE), avg_robbery = mean(robbery, na.rm = TRUE))
 
 crime_types
 ```
@@ -386,3 +258,15 @@ There are several limitations with my project in which I should disclose as to h
 
 Because of these limitations the results should be interpreted carefully.
 
+Story Pitch:
+
+After analysis of FBI Crime Data Explorer rexords from 2021-26 I have found that prince George's County, which surrounds the University of Maryland, has by far the highest violent crime rate among the other seven Big Ten jurisdictions I looked at. Even after running the data in correlation with populaton size, PG County consistently recorded substantially higher rates of aggravated assault, robbery and homicide than the other college communities studied.
+
+On a lighter note, the tide is turning. I found that violent crime rates in PG County have significantly declined, and are still declining in recent years. I confirmed this by applying both a t-test and regression analysis which both showed a meaningful downward trend over time. 
+
+My reporting would focus on why PG County differs so dramatically from the other jurisdictions that surround Big Ten universities and what factprs may be contributing- but also what is causing this optimistic decline. I would interview local law enforcers for professional standpoint, community members for a human point of view and UMD public safety staff for the University's response.
+
+Conclusion:
+
+By using descriptive stats, confidence intervals, hypothesis testing and more this project found strong evidence that PG County has the highest VC rate among the Big10 jurisdictions studied. It is important to note that the largest contributors to violent crime across the board are aggravated assault and robbery. 
+Although when made into visualizations the data looks bad, especially at its peak in 2022, PG County violent crime is currently on the decline and if it follows the trend it will be level with the second highest crime rate noted by a Big10 university's surrounding area.
