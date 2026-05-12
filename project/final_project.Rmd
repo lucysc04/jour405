@@ -245,8 +245,11 @@ crime_summary <- all_crime |>
 
 crime_summary
 ```
+Again these statistics strongly support my hypothesis. PG County's average violent crime rate of approximately 287 crimes per 100,000 residents is much higher than every other jurisdiction.
 
+Washtenaw County & Champaign have the next highest avg rates, but both remain far below PG County. East Lansing and Evanston have the lowest avg violent crime rates in the project.
 
+PG County has largest standard deviation, suggesting that its VC rates tend to fluctuate a lot from month to month compared to many of the other jurisdictions. Also, its confidence interval does not overlap with any of the lower-rate jurisdictions, meaning that its higher crime rate is not simply due to random variation in the data.
 
 
 
