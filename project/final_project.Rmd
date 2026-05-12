@@ -2,71 +2,82 @@
 title: "final_project"
 output: html_document
 ---
-My project is comparing the safety of jurisdictions in the immediate vicinity of Big10 schools. All data is from the FBI Crime Data Explorer Website: https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/crime-trend
+By Lucy Scothern
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
 
-I have data from March 2021 to, in most cases March 2026. I have compiled the 4 different categories of violent crime (aggravated assault, homicide, rape, robbery) into combined tables for each jurisdiction. 
-My biggest concern with analyzing my data is how I'm going to work out the per capita, to weigh the data correctly dependent on population- that will be my next step.
-The most common data that is missing is the most recent months, i which I have filled out N/A so that RStudio recognizes it as a null value. 
-There are 3 jurisdiction that have significantly larger populations (UMD, Ohio State and Michigan). The issue I faced with this data was that the jurisdictions are slightly different due to border lines of county's and the general policing structure in the area- these are the universities I'll have to focus on weighting the most.
-Since my files are downloaded to my laptop in a folder I didn't need to do a read csv to view the data. However, I would like to know how to create a csv code for my data.
+Introduction:
+for my final project, I analyzed violent crime trends in the jurisdictions surrounding several Big Ten universities from 2021 through to 2026. The main goal of this project is to determine which Big Ten University out of the sample I have chosen has the most dangerous surrounding area based on violent crime rates per 100,000.
 
+My central hypothesis is thatprince George's County, which surrounds the University of Maryland, has the highest violent crime rate among the jurisdictions included in my analysis. Because PG County is often perceived as having higher crime levels than many of the areas the other Big Ten college communities are located in, I wanted to test whether the data supports that assumption.
+
+My project also examines whether the violent crime rates are increasing, decreasing or remaining stable over time to detect patterns that may cause a change in area safety in the future, across the different jurisdictions.
+
+The data comes from the FBI Crime Data Explorer. Each dataset includes monthly totals for aggravated assault, homicide, rape and robbery. 
+
+The jurisdictions included in this project are:
+- Bloomington (Indiana University)
+- Champaign (University of Illinois)
+- East Lansing (Michigan State)
+- Evanston (Northwestern)
+- Franklin County (Ohio State)
+- New Brunswick (Rutgers)
+- Prince George's County (University of Maryland)
+- Washentaw County (University of Michigan)
+
+After finding that some areas have larger jurisdictions than others, especially PG County, Franklin County and Washentaw County, raw crime totals would unfairly make these bigger areas appear more dangerous. Calculating per 100,000 residents is necessary for accurate comparison.
+
+Another issue in the dataset is missing data in some of the most recent months. Those values are treated as N/A values so that R handles them correctly.
+
+Loading libraries:
 
 ```{r}
 library(tidyverse)
+library(lubridate)
+library(broom)
+library(knitr)
 ```
 
-Bloomington Violent Crime data:
-Bloomington is the immediate police jurisdiction at the University of Indiana. The Population is 80,000 residents. 
+The first step is loading all of the datasets for each jurisdiction:
+
 ```{r}
-view(Bloomington_VC_Data_Sheet1)
-head(Bloomington_VC_Data_Sheet1)
+Bloomington_VC_Data_Sheet1 <- read_csv("Bloomington VC Data - Sheet1.csv", na = c("N/A"))
+Champaign_VC_Data1 <- read_csv("Champaign VC Data - Sheet1.csv", na = c("N/A"))
+East_Lansing_VC_Data1 <- read_csv("East Lansing VC Data - Sheet1.csv", na = c("N/A"))
+Franklin_County_VC_Data1 <- read_csv("Evanston VC Data - Sheet1.csv", na = c("N/A"))
+New_Brunswick_VC_Data1 <- read_csv("New Brunswick VC Data - Sheet1.csv", na = c("N/A"))
+PG_County_VC_Data1 <- read_csv("PG County VC Data - Sheet1.csv", na = c("N/A"))
+Washentaw_County_VC_Data1 <- read_csv("Washentaw County VC Data - Sheet1.csv", na = c("N/A"))
+
 ```
 
-Champaign Violent Crime data:
-Champaign  is the immediate police jurisdiction at the University of Illinois. The Population is 90,000 residents. 
+
+Clean and Organize Data: Each dataset includes monthly counts for aggravated assault, homicide, rape and robbery. I cleaned the variable names, converted the month column into a date format, added population estimates and calculated VC rates per 100,000 res.
+
 ```{r}
-view(Champaign_VC_Data_Sheet1)
-head(Champaign_VC_Data_Sheet1)
+Bloomington <- Bloomington_VC_Data_Sheet1 |>
+  rename(
+    month = Month,
+    aggravated_assault= `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> 
+  mutate(
+    month = my(month),
+    population = 80000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Bloomington"
+  )
 ```
 
-East Lansing Violent Crime data:
-East Lansing is the immediate police jurisdiction at Michigan State University. The Population is 50,000 residents. 
-```{r}
-view(East_Lansing_VC_Data_Sheet1)
-head(East_Lansing_VC_Data_Sheet1)
-```
 
-Evanston Violent Crime data:
-Evanston is the immediate police jurisdiction at Northwestern University. The Population is 77,000 residents. 
-```{r}
-view(Evanston_VC_Data_Sheet1)
-head(Evanston_VC_Data_Sheet1)
-```
 
-Franklin County Violent Crime data:
-Franklin County is the immediate police jurisdiction at The Ohio State University. The Population is 1.3 million residents. 
-```{r}
-view(Franklin_County_VC_Data_Sheet1)
-head(Franklin_County_VC_Data_Sheet1)
-```
 
-New Brunswick Violent Crime data:
-New Brunswick is the immediate police jurisdiction at Rutgers University. The Population is 55,000 residents. 
-```{r}
-view(New_Brunswick_VC_Data_Sheet1)
-head(New_Brunswick_VC_Data_Sheet1)
-```
 
-Prince George's County Violent Crime data:
-Prince George's County is the immediate police jurisdiction at the University of Maryland. The Population is 970,000 residents. 
-```{r}
-view(PG_County_VC_Data_Sheet1)
-head(PG_County_VC_Data_Sheet1)
-```
 
-Washtenaw County Violent Crime data:
-Washtenaw County is the immediate police jurisdiction at the University of Michigan. The Population is 372,000 residents. 
-```{r}
-view(Washentaw_County_VC_Data_Sheet1)
-head(Washentaw_County_VC_Data_Sheet1)
-```
+
+
+
+
