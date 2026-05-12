@@ -243,23 +243,76 @@ crime_summary <- all_crime |>
     ci_upper = mean_rate + margin_error
   )
 
-crime_summary
 ```
 Again these statistics strongly support my hypothesis. PG County's average violent crime rate of approximately 287 crimes per 100,000 residents is much higher than every other jurisdiction.
 
 Washtenaw County & Champaign have the next highest avg rates, but both remain far below PG County. East Lansing and Evanston have the lowest avg violent crime rates in the project.
 
-PG County has largest standard deviation, suggesting that its VC rates tend to fluctuate a lot from month to month compared to many of the other jurisdictions. Also, its confidence interval does not overlap with any of the lower-rate jurisdictions, meaning that its higher crime rate is not simply due to random variation in the data.
+PG County has largest standard deviation, suggesting that its VC rates tend to fluctuate a lot from month to month compared to many of the other jurisdictions. Also, its confidence interval does not overlap with any of the lower-rate jurisdictions, meaning that its higher crime rate does not come down to random variation in the data.
 
+Visualizing Confidence Intervals:
 
+To achieve a better comparison of the areas, I have created a bar chart showing avg VC rates alongside confidence intervals. CIs give me more context as jurisdictions with large overlap may not be very different from one another whereas jurisdictions with very separated intervals are more likely to have genuinely different crime environments.
 
+```{r}
+crime_summary |> ggplot(aes(x = reorder(jurisdiction, mean_rate), y = mean_rate, fill = jurisdiction)) +
+  geom_col() + geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) +
+  coord_flip() +
+  labs(title = "Average Violent Crime Rate by Jurisdiction",
+    x = "Jurisdiction",
+    y = "Average violent crimes per 100,000 residents") + theme_minimal() + theme(legend.position = "none")
+```
 
+- Further support for the hypothesis.
+- PG County's avg VC rate is much higher than every other area, and its CI is completely separated from the others. 
+- Washtenaw County and Champaign have the next highest avg rates. East Lansing, Evanston and Franklin County have the lowest.
 
+Hypothesis Testing:
 
+Next, I wanted to test whether violent crime rates changed over time. To look at this in the fairest way possible, I split the PG County data into 2 periods- 2021-23 and 2024-26. I then used a t-test to determine whether the avg VC rate changed significantly between the two time periods.
 
+Hypotheses: 
+- Null: Thereis no differnece in VC rates between the earlier and later periods.
+- Alt Hypothesis: VC rates changed between the two periods.
 
+```{r}
+pg_periods <- all_crime |> filter(jurisdiction == "Prince George's County") |> mutate(period = if_else(year(month) <= 2023, "2021-2023", "2024-2026"))
 
+t_test_pg <- t.test(rate_per_100k ~ period, data = pg_periods)
 
+t_test_pg
 
+```
 
+Thee results show a statistically significant decrease in VC rates in PG County over time. The avg rate fell from about 315 crimes per 100k residents during 2021-23 to 250 during 2024-26. The p-value is far below 0.05 meaning that the difference is unlikely to be caused by random variation. The CI backs this up also. Looking at these results, although the area around UMD still has the highest average crime rate in the project, it is following a trend of decreasing crime, as seen in the last few years.
+
+Effect Size: Statistical significance by itself does not tell us if the difference s practically meaningful enough for a story to be written. So, to measure the size of the difference, I calculated Cohen's d.
+
+```{r}
+period_summary <- pg_periods |> group_by(period) |>
+summarize(mean_rate = mean(rate_per_100k, na.rm = TRUE), sd_rate = sd(rate_per_100k, na.rm = TRUE), months = n())
+
+first_period <- period_summary |> filter(period == "2021-2023")
+second_period <- period_summary |> filter(period == "2024-2026")
+
+pooled_sd <- sqrt(
+((first_period$months - 1) * first_period$sd_rate^2 + (second_period$months - 1) * second_period$sd_rate^2) /(first_period$months + second_period$months - 2))
+
+cohens_d <- (first_period$mean_rate - second_period$mean_rate) / pooled_sd
+
+cohens_d
+```
+
+Cohen’s d: approx. 0.96 = this is considered a large effect size. This outcome suggests that the decrease in VC between 2021-23 and 2024-26 was not only statistically significant but also meaningful in practically. In other words, it appears to represent a substantial real life change rather than a small fluctuation in the stats.
+
+Linear Regression Analysis:
+
+The next step was to use linear regression to estimate the change in VC over time. Instead of splitting the data into 2 periods, regression allows me to estimate a continuous monthly trend. Firstly, I ahd to create a numeric month index for each jurisdiction
+
+```{r}
+all_crime <- all_crime |>
+  arrange(jurisdiction, month) |>
+  group_by(jurisdiction) |>
+  mutate(month_index = row_number())
+```
 
