@@ -307,7 +307,7 @@ Cohen’s d: approx. 0.96 = this is considered a large effect size. This outcome
 
 Linear Regression Analysis:
 
-The next step was to use linear regression to estimate the change in VC over time. Instead of splitting the data into 2 periods, regression allows me to estimate a continuous monthly trend. Firstly, I ahd to create a numeric month index for each jurisdiction
+The next step was to use linear regression to estimate the change in VC over time. Instead of splitting the data into 2 periods, regression allows me to estimate a continuous monthly trend. Firstly, I ahd to create a numeric month index for each jurisdiction (added onto the end of my all_crime table).
 
 ```{r}
 all_crime <- all_crime |>
@@ -315,4 +315,74 @@ all_crime <- all_crime |>
   group_by(jurisdiction) |>
   mutate(month_index = row_number())
 ```
+
+Regression model for PG County:
+This estimates VC decrease or increase in PG County over time.
+
+```{r}
+pg_model <- all_crime |> filter(jurisdiction == "Prince George's County") |> lm(rate_per_100k ~ month_index, data = _)
+
+summary(pg_model)
+```
+
+Coefficient for month_index: approx. -1.78= the VC rate decreased by about 1.8 times per 100k residents each month on avg during the time period that I studied.
+P-value: below 0.001, indicating the downward trend is unlikely to be caused by random chance. The adjusted R-squared value of about 0.16 shows time alone explains a little portion of the variation and that the model still holds strong in supporting the evidence of a downward trend.
+
+Visualizing the Regression Model:
+
+```{r}
+all_crime |> filter(jurisdiction == "Prince George's County") |> ggplot(aes(x = month_index, y = rate_per_100k)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red") + labs( title = "Prince George's County Violent Crime Trend",
+  x = "Month Index",
+  y = "Violent crime rate per 100,000 residents") + theme_minimal()
+```
+
+Regression Analysis for All Jurisdictions:
+
+Moving away from looking at PG County in isolation, I ran a separate regression model for every jurisdiction. this allowed me to compare which jurisdictions are seeing the strongest increases/decreases in VC over time.
+
+```{r}
+regression_results <- all_crime |> group_by(jurisdiction) |> nest() |> mutate( model = map(data, ~ lm(rate_per_100k ~ month_index, data = .x)), tidied = map(model, tidy)) |> unnest(tidied) |> filter(term == "month_index") |> select(jurisdiction, estimate, p.value)
+
+regression_results
+```
+
+These results show that most areas experienced a decline in VC rates over time. Every one in the project had a -ive regression coefficient, meaning VC generally trended downward. PG county had the steepest decline. Bloomington and Champaign also showed large monthly decreases. 
+Most of the places I’ve looked at had statistically significant p-values below 0.05= downward trends are unlikely to be caused by random chance. East Lansing was the only jurisdiction where the trend was not statistically significant= VC rate remained stable over time.
+
+Multiple Regression Analysis:
+
+Finally, I created a multiple regression model that includes both month index and jurisdiction. This helps me to examine changes over time while also accounting for differences between the areas.
+
+```{r}
+multiple_model <- lm(rate_per_100k ~ month_index + jurisdiction, data = all_crime)
+
+summary(multiple_model)
+```
+This shows that VC generally declined over time across the jurisdictions. Even after controlling for time PG County remained higher than every other are= supporting the hypothesis.The model fits the data very well explaining about 90% of the variation in VC.
+
+Crime Type Analysis:
+
+One thing I really wanted to do from the start of this project was to look at the 4 violent crimes individually. One limitation of combining all the VC into one variable is that some crime categories may be driving changes more than others. To look at this I calculated the avg rates for each crime category.
+
+```{r}
+crime_types <- all_crime |> summarize( avg_aggravated_assault = mean(aggravated_assault, na.rm = TRUE),
+    avg_homicide = mean(homicide, na.rm = TRUE),
+    avg_rape = mean(rape, na.rm = TRUE),
+    avg_robbery = mean(robbery, na.rm = TRUE))
+
+crime_types
+```
+Analysis: PG County has a way higher average than any of the other areas once again- esp. aggravated assault and robbery. These 2 categories appear to be the biggest contributors to its overall VC rate.
+
+Washtenaw County also has relatively high aggravated assault rates, while New Brunswick stands out for having a comparatively high robbery avg. 
+
+Acknowledged Limitations:
+There are several limitations with my project in which I should disclose as to have full transparency if my data is used for a story.
+
+- Jurisdictions vary greatly in size, although I corrected this by getting results for 100k per capita, the dynamics across larger communities are hugely different to smaller communities. To put it simply, a larger area gives you a bigger chance of finding multiple bad areas that have higher crime, rather than a smaller jurisdiction. These stats may not apply for nicer parts of PG County.
+- Some jurisdictions are counties while others are cities- once again different dynamics.
+- It is always possible that crime reporting practices may differ between police departments.
+- The models only examine time and jurisdiction but many other factors may influence VC rates.
+
+Because of these limitations the results should be interpreted carefully.
 
