@@ -45,6 +45,7 @@ The first step is loading all of the datasets for each jurisdiction:
 Bloomington_VC_Data_Sheet1 <- read_csv("Bloomington VC Data - Sheet1.csv", na = c("N/A"))
 Champaign_VC_Data1 <- read_csv("Champaign VC Data - Sheet1.csv", na = c("N/A"))
 East_Lansing_VC_Data1 <- read_csv("East Lansing VC Data - Sheet1.csv", na = c("N/A"))
+Evanston_VC_Data1 <- read_csv("Evanston VC Data - Sheet1.csv", na= c("N/A"))
 Franklin_County_VC_Data1 <- read_csv("Evanston VC Data - Sheet1.csv", na = c("N/A"))
 New_Brunswick_VC_Data1 <- read_csv("New Brunswick VC Data - Sheet1.csv", na = c("N/A"))
 PG_County_VC_Data1 <- read_csv("PG County VC Data - Sheet1.csv", na = c("N/A"))
@@ -71,6 +72,184 @@ Bloomington <- Bloomington_VC_Data_Sheet1 |>
     jurisdiction = "Bloomington"
   )
 ```
+
+```{r}
+Champaign <- Champaign_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault= `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> 
+  mutate(
+    month = my(month),
+    population = 80000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Champaign"
+  )
+```
+
+```{r}
+East_Lansing <- East_Lansing_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault= `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> 
+  mutate(
+    month = my(month),
+    population = 80000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery, rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "East Lansing"
+  )
+```
+
+```{r}
+Evanston <- Evanston_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault = `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> mutate(
+    month = my(month),
+    population = 77000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery,
+    rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Evanston"
+  )
+```
+
+```{r}
+Franklin_County <- Franklin_County_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault = `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> mutate(
+    month = my(month),
+    population = 77000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery,
+    rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Franklin County"
+  )
+```
+
+```{r}
+New_Brunswick <- New_Brunswick_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault = `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> mutate(
+    month = my(month),
+    population = 77000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery,
+    rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "New Brunswick"
+  )
+```
+
+```{r}
+PG_County <- PG_County_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault = `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> mutate(
+    month = my(month),
+    population = 77000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery,
+    rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Prince George's County"
+  )
+```
+
+```{r}
+Washtenaw_County <- Washentaw_County_VC_Data1 |>
+  rename(
+    month = Month,
+    aggravated_assault = `Aggravated Assault Offenses`,
+    homicide = `Homicide Offenses`,
+    rape = `Rape Offenses`,
+    robbery = `Robbery Offenses`
+  ) |> mutate(
+    month = my(month),
+    population = 77000,
+    total_violent_crime = aggravated_assault + homicide + rape + robbery,
+    rate_per_100k = (total_violent_crime / population) * 100000,
+    jurisdiction = "Washtenaw County"
+  )
+```
+
+Combining the data: After cleaning each dataset, I am combining them into one big dataframe using bind_rows(). This makes it possible to compare all of them together instead of analyzing individually.
+
+```{r}
+all_crime <- bind_rows(Bloomington,Champaign, East_Lansing, Evanston, Franklin_County, New_Brunswick, PG_County, Washtenaw_County
+)
+```
+
+Data exploration: Before I started to analyze, I wanted to look at the overall structure of the big dataset and check for missing values or unusual patterns 
+
+```{r}
+glimpse(all_crime)
+summary(all_crime$rate_per_100k)
+```
+
+I can see that the data seems to be consistent across jurisdictions, although some of the most recent months are missing data. The rates vary substantially which means there are meaningful differences worth investigating.
+
+Visualization of VC Over Time: This first visualization is a line chart showing crime rates over time for each jurisdiction. This helps identify any overall trends and any unusual spikes/ declines.
+
+```{r}
+all_crime |> ggplot(aes(x= month, y= rate_per_100k, color = jurisdiction)) + geom_line() +
+  labs(
+    title= "Violent Crime Rates Across Big Ten Jurisdictions",
+    x="Month",
+    y="Violent crimes per 100,000 residents"
+    ) +
+  theme_minimal()
+```
+
+This initial graph shows substantial differences in VC rates. PG County consistently had the highest violent crime rate throughout most of the time period, often far exceeding the other areas even after adjustment. Most of cluster below 100 violent crimes per 100,000 residents, although Washtenaw County and Champaign show slight spikes on occasion. The chart simply provides early support for my hypothesis.
+
+Next I calculated descriptive stats for each jurisdiction. These include:
+- Mean VC rate
+- Standard deviation
+- Standard error
+- Margin of Error 
+- 95% confidence intervals
+
+(These measures help estimate a typical violent crime rate & settlign any uncertainty.)
+
+```{r}
+crime_summary <- all_crime |>
+  group_by(jurisdiction) |> summarize(
+    mean_rate = mean(rate_per_100k, na.rm = TRUE),
+    sd_rate = sd(rate_per_100k, na.rm = TRUE),
+    months = sum(!is.na(rate_per_100k)),
+    se_rate = sd_rate / sqrt(months),
+    margin_error = qt(0.975, df = months - 1) * se_rate,
+    ci_lower = mean_rate - margin_error,
+    ci_upper = mean_rate + margin_error
+  )
+
+crime_summary
+```
+
+
+
+
+
 
 
 
